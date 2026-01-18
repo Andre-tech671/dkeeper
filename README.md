@@ -1,59 +1,177 @@
-# `dkeeper`
+# 📚 DFINITY Project Structure - dkeeper
 
-Welcome to your new `dkeeper` project and to the Internet Computer development community. By default, creating a new project adds this README and some template files to your project directory. You can edit these template files to customize your project and to include your own code to speed up the development cycle.
+A comprehensive documentation of the dkeeper project structure, which is a DFINITY Internet Computer application with a Motoko backend and React/Vite frontend.
 
-To get started, you might want to explore the project directory structure and the default configuration file. Working with this project in your development environment will not affect any production deployment or identity tokens.
+## 🏗️ Project Overview
 
-To learn more before you start working with `dkeeper`, see the following documentation available online:
-
-- [Quick Start](https://internetcomputer.org/docs/current/developer-docs/setup/deploy-locally)
-- [SDK Developer Tools](https://internetcomputer.org/docs/current/developer-docs/setup/install)
-- [Motoko Programming Language Guide](https://internetcomputer.org/docs/current/motoko/main/motoko)
-- [Motoko Language Quick Reference](https://internetcomputer.org/docs/current/motoko/main/language-manual)
-
-If you want to start working on your project right away, you might want to try the following commands:
-
-```bash
-cd dkeeper/
-dfx help
-dfx canister --help
+```
+dkeeper/
+├── .gitignore
+├── README.md                    # Project documentation
+├── dfx.json                     # DFX configuration for Internet Computer
+├── package.json                 # Root npm workspace configuration
+├── tsconfig.json                # TypeScript configuration
+├── package-lock.json            # npm dependency lock file
+└── src/
+    ├── dkeeper_backend/         # Motoko backend canister
+    │   └── main.mo             # Main backend actor implementation
+    └── dkeeper_frontend/       # React frontend application
+        ├── index.html          # HTML entry point
+        ├── package.json        # Frontend dependencies and scripts
+        ├── tsconfig.json       # Frontend TypeScript configuration
+        ├── vite.config.js      # Vite build configuration
+        ├── public/             # Static assets
+        │   ├── .ic-assets.json5
+        │   ├── favicon.ico
+        │   └── logo2.svg
+        └── src/                # Source code
+            ├── main.jsx        # React app entry point
+            ├── App.jsx         # Main React component
+            ├── index.scss      # Global styles
+            └── vite-env.d.ts   # Vite type definitions
 ```
 
-## Running the project locally
+## 📁 File Descriptions
 
-If you want to test your project locally, you can use the following commands:
+### Root Directory Files
+
+| File | Purpose |
+|------|---------|
+| `.gitignore` | Specifies intentionally untracked files to ignore |
+| `README.md` | Project documentation (this file) |
+| `dfx.json` | DFX configuration defining canisters and build settings |
+| `package.json` | Root npm workspace configuration |
+| `tsconfig.json` | TypeScript compiler options for the workspace |
+| `package-lock.json` | Exact dependency tree lock file |
+
+### Backend (Motoko)
+
+| File | Purpose |
+|------|---------|
+| `src/dkeeper_backend/main.mo` | Main Motoko actor with business logic |
+
+### Frontend (React/Vite)
+
+| File | Purpose |
+|------|---------|
+| `src/dkeeper_frontend/index.html` | HTML entry point for the React app |
+| `src/dkeeper_frontend/package.json` | Frontend dependencies and npm scripts |
+| `src/dkeeper_frontend/tsconfig.json` | TypeScript configuration for frontend |
+| `src/dkeeper_frontend/vite.config.js` | Vite bundler configuration |
+| `src/dkeeper_frontend/src/main.jsx` | React app initialization |
+| `src/dkeeper_frontend/src/App.jsx` | Main React component |
+| `src/dkeeper_frontend/src/index.scss` | Global SCSS styles |
+| `src/dkeeper_frontend/src/vite-env.d.ts` | Vite type declarations |
+| `src/dkeeper_frontend/public/` | Static assets (favicon, logos) |
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js >= 16.0.0
+- npm >= 7.0.0
+- DFINITY SDK (dfx)
+
+### Installation
 
 ```bash
-# Starts the replica, running in the background
-dfx start --background
+# Install dependencies
+npm install
 
-# Deploys your canisters to the replica and generates your candid interface
+# Setup canisters and deploy
+cd src/dkeeper_frontend
+npm run setup
+```
+
+### Development
+
+#### Start the local replica
+```bash
+dfx start --background
+```
+
+#### Deploy to local replica
+```bash
 dfx deploy
 ```
 
-Once the job completes, your application will be available at `http://localhost:4943?canisterId={asset_canister_id}`.
+#### Start frontend development server
+```bash
+npm start
+# OR
+cd src/dkeeper_frontend && npm start
+```
 
-If you have made changes to your backend canister, you can generate a new candid interface with
+The frontend will be available at `http://localhost:8080`, proxying API requests to the replica at port 4943.
+
+### Building for Production
 
 ```bash
+# Build frontend
+cd src/dkeeper_frontend && npm run build
+
+# Generate candid interface
 npm run generate
 ```
 
-at any time. This is recommended before starting the frontend development server, and will be run automatically any time you run `dfx deploy`.
+## 🏗️ Architecture
 
-If you are making frontend changes, you can start a development server with
+### Backend (Motoko)
+- **Language**: Motoko
+- **Type**: Canister (smart contract on ICP)
+- **File**: `src/dkeeper_backend/main.mo`
 
-```bash
-npm start
-```
+### Frontend (React)
+- **Framework**: React 18
+- **Language**: TypeScript/JavaScript
+- **Build Tool**: Vite
+- **Styling**: SCSS
+- **Location**: `src/dkeeper_frontend/`
 
-Which will start a server at `http://localhost:8080`, proxying API requests to the replica at port 4943.
+### Canisters
 
-### Note on frontend environment variables
+| Canister | Type | Description |
+|----------|------|-------------|
+| `dkeeper_backend` | Motoko | Backend logic and data storage |
+| `dkeeper_frontend` | Assets | Static web assets for the frontend |
+| `internet_identity` | Custom | Internet Identity authentication (pre-configured) |
 
-If you are hosting frontend code somewhere without using DFX, you may need to make one of the following adjustments to ensure your project does not fetch the root key in production:
+## 📦 Dependencies
 
-- set`DFX_NETWORK` to `ic` if you are using Webpack
-- use your own preferred method to replace `process.env.DFX_NETWORK` in the autogenerated declarations
-  - Setting `canisters -> {asset_canister_id} -> declarations -> env_override to a string` in `dfx.json` will replace `process.env.DFX_NETWORK` with the string in the autogenerated declarations
-- Write your own `createActor` constructor
+### Frontend Dependencies
+- `react` ^18.2.0
+- `react-dom` ^18.2.0
+- `@dfinity/agent` ^3.0.0
+- `@dfinity/candid` ^3.0.0
+- `@dfinity/principal` ^3.0.0
+
+### Frontend Dev Dependencies
+- `@types/react` ^18.2.14
+- `@types/react-dom` ^18.2.6
+- `@vitejs/plugin-react` ^4.0.1
+- `typescript` ^5.1.3
+- `vite` ^4.3.9
+- `sass` ^1.63.6
+
+## 🔧 Configuration
+
+### DFX Configuration (`dfx.json`)
+Defines the canisters, their types, dependencies, and remote IDs for Internet Computer deployment.
+
+### Vite Configuration (`vite.config.js`)
+Configures the Vite build process, including:
+- Environment variables setup
+- Plugin configuration
+- Build options
+
+## 📖 Learn More
+
+- [Internet Computer Documentation](https://internetcomputer.org/docs/)
+- [Motoko Programming Language](https://internetcomputer.org/docs/current/motoko/main/motoko)
+- [DFINITY Developer Tools](https://internetcomputer.org/docs/current/developer-docs/setup/install)
+- [Quick Start Guide](https://internetcomputer.org/docs/current/developer-docs/setup/deploy-locally)
+
+## 📄 License
+
+This project is licensed under the terms of the MIT license.
+

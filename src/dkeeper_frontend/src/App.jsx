@@ -1,31 +1,39 @@
-import { useState } from 'react';
-import { dkeeper_backend } from 'declarations/dkeeper_backend';
+import React, { useEffect, useState } from "react";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Note from "./components/Note";
+import CreateArea from "./components/CreateArea";
+import { dkeeperActor } from "./services/dkeeper";
+import "./index.scss";
 
 function App() {
-  const [greeting, setGreeting] = useState('');
+  const [notes, setNotes] = useState([]);
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    const name = event.target.elements.name.value;
-    dkeeper_backend.greet(name).then((greeting) => {
-      setGreeting(greeting);
-    });
-    return false;
+  useEffect(() => {
+    async function loadNotes() {
+      const result = await dkeeperActor.getNotes();
+      setNotes(result);
+    }
+    loadNotes();
+  }, []);
+
+  async function addNote(newNote) {
+    await dkeeperActor.addNote(newNote);
+    const updated = await dkeeperActor.getNotes();
+    setNotes(updated);
   }
 
   return (
-    <main>
-      <img src="/logo2.svg" alt="DFINITY logo" />
-      <br />
-      <br />
-      <form action="#" onSubmit={handleSubmit}>
-        <label htmlFor="name">Enter your name: &nbsp;</label>
-        <input id="name" alt="Name" type="text" />
-        <button type="submit">Click Me!</button>
-      </form>
-      <section id="greeting">{greeting}</section>
-    </main>
+    <div>
+      <Header />
+      <CreateArea onAdd={addNote} />
+      {notes.map((note, idx) => (
+        <Note key={idx} content={note} />
+      ))}
+      <Footer />
+    </div>
   );
 }
 
 export default App;
+
