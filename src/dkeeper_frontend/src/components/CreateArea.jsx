@@ -1,22 +1,46 @@
 import React, { useState } from "react";
 
-function CreateArea({ onAdd }) {
-  const [note, setNote] = useState("");
+function CreateArea(props) {
+  const [note, setNote] = useState({
+    title: "",
+    content: ""
+  });
 
-  async function submitNote(event) {
+  function handleChange(event) {
+    const { name, value } = event.target;
+
+    setNote(prevNote => {
+      return {
+        ...prevNote,
+        [name]: value
+      };
+    });
+  }
+
+  function submitNote(event) {
+    props.onAdd(note);
+    setNote({
+      title: "",
+      content: ""
+    });
     event.preventDefault();
-    if (note.trim() === "") return;
-    await onAdd(note);
-    setNote("");
   }
 
   return (
-    <div className="create-area">
-      <form>
+    <div>
+      <form className="create-note">
+        <input
+          name="title"
+          onChange={handleChange}
+          value={note.title}
+          placeholder="Title"
+        />
         <textarea
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
-          placeholder="Write a note..."
+          name="content"
+          onChange={handleChange}
+          value={note.content}
+          placeholder="Take a note..."
+          rows="3"
         />
         <button onClick={submitNote}>Add</button>
       </form>
@@ -25,4 +49,3 @@ function CreateArea({ onAdd }) {
 }
 
 export default CreateArea;
-
