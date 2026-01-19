@@ -1,14 +1,24 @@
 import List "mo:base/List";
+import Debug "mo:base/Debug";
 
-persistent actor main {
-  stable var notes : List.List<Text> = null;
+persistent actor Dkeeper {
 
-  public func addNote(note : Text) : async () {
-    notes := List.push<Text>(note, notes);
+  public type Note = {
+    title: Text;  
+    content: Text;
   };
 
-  public query func getNotes() : async [Text] {
-    return List.toArray(notes);
-  };
-};
+  var notes: List.List<Note> = List.nil<Note>();
+  
+  public func createNote(titleText: Text, contextText: Text){
 
+    let newNote: Note = {
+      title = titleText;
+      content = contextText;
+    };
+
+    notes := List.push(newNote, notes);
+    Debug.print(debug_show(notes));
+
+  }
+}
