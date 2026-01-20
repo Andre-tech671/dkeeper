@@ -144,6 +144,7 @@ npm run generate
 - `@dfinity/agent` ^3.0.0
 - `@dfinity/candid` ^3.0.0
 - `@dfinity/principal` ^3.0.0
+- `react-icons` ^5.5.0
 
 ### Frontend Dev Dependencies
 - `@types/react` ^18.2.14
@@ -174,4 +175,36 @@ Configures the Vite build process, including:
 ## 📄 License
 
 This project is licensed under the terms of the MIT license.
+
+---
+
+## 🛠️ Recent Changes
+
+### Delete Button Icon Enhancement
+
+The delete button in the Note component now displays a trash icon instead of text:
+
+**Changes:**
+- Added `react-icons` dependency (v5.5.0)
+- Updated `Note.jsx` to use `<FaTrash />` icon
+- Enhanced button styling in `style.css` with hover effects
+
+**Before:**
+```jsx
+<button onClick={handleClick}>DELETE</button>
+```
+
+**After:**
+```jsx
+import { FaTrash } from "react-icons/fa";
+
+<button onClick={() => props.onDelete(props.id)}>
+  <FaTrash />
+</button>
+```
+
+**Styling:**
+- Default color: yellow (#f5ba13)
+- Hover color: red (#d11a2a)
+- Smooth transition effect on hover
 
