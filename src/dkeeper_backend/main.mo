@@ -9,7 +9,8 @@ persistent actor Dkeeper {
   };
 
   var notes: List.List<Note> = List.nil<Note>();
-  
+
+  // A function to create a new note and add it to the notes list
   public func createNote(titleText: Text, contextText: Text){
 
     let newNote: Note = {
@@ -19,6 +20,9 @@ persistent actor Dkeeper {
 
     notes := List.push(newNote, notes);
     Debug.print(debug_show(notes));
+  };
 
-  }
+  public func readNotes(): async [Note]{
+    return List.toArray(notes);
+  };
 }
