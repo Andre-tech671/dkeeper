@@ -31,6 +31,8 @@ function App() {
   }
 
   function deleteNote(id) {
+    // Call the backend to delete the note
+    dkeeper_backend.removeNote(id);
     setNotes(prevNotes => {
       return prevNotes.filter((noteItem, index) => { 
         return index !== id;
