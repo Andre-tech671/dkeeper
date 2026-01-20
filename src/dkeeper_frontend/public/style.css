@@ -65,6 +65,15 @@ footer p {
   height: 36px;
   cursor: pointer;
   outline: none;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.note button:hover {
+  color: #d11a2a;
 }
 
 form.create-note {
